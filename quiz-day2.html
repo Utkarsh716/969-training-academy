@@ -1,0 +1,492 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day 2 Quiz - 969 Training Academy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            }
+          },
+          animation: {
+            fadeIn: 'fadeIn 0.5s ease-out forwards'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-900 font-inter text-gray-200">
+  <header class="bg-gradient-to-r from-blue-900 to-blue-700 py-12">
+    <div class="container mx-auto text-center">
+      <h1 class="text-4xl font-extrabold text-white">Day 2 Quiz</h1>
+      <p class="mt-3 text-lg text-gray-300">Test your knowledge with our interactive quiz</p>
+    </div>
+  </header>
+  <main class="container mx-auto py-12">
+    <form id="quiz-form" class="max-w-3xl mx-auto space-y-8">
+      <!-- Question 1 -->
+      <div class="p-6 bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition duration-300 animate-fadeIn">
+        <p class="text-xl font-semibold text-white">Question 1: What is the company’s main department?</p>
+        <div class="mt-4 space-y-3">
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q1" value="a" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>A) Sales</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q1" value="b" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>B) Marketing</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q1" value="c" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>C) Engineering</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q1" value="d" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>D) HR</span>
+          </label>
+        </div>
+      </div>
+      <!-- Question 2 -->
+      <div class="p-6 bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition duration-300 animate-fadeIn" style="animation-delay: 0.1s">
+        <p class="text-xl font-semibold text-white">Question 2: What is the company’s growth plan?</p>
+        <div class="mt-4 space-y-3">
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q2" value="a" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>A) Mergers</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q2" value="b" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>B) Organic growth</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q2" value="c" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>C) Partnerships</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q2" value="d" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>D) Acquisitions</span>
+          </label>
+        </div>
+      </div>
+      <!-- Question 3 -->
+      <div class="p-6 bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition duration-300 animate-fadeIn" style="animation-delay: 0.2s">
+        <p class="text-xl font-semibold text-white">Question 3: What is the company’s tech focus?</p>
+        <div class="mt-4 space-y-3">
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q3" value="a" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>A) AI</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q3" value="b" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>B) Cloud</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q3" value="c" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>C) IoT</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q3" value="d" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>D) Blockchain</span>
+          </label>
+        </div>
+      </div>
+      <!-- Question 4 -->
+      <div class="p-6 bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition duration-300 animate-fadeIn" style="animation-delay: 0.3s">
+        <p class="text-xl font-semibold text-white">Question 4: What is the company’s sales strategy?</p>
+        <div class="mt-4 space-y-3">
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q4" value="a" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>A) Direct sales</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q4" value="b" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>B) Online sales</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q4" value="c" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>C) Distributors</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q4" value="d" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>D) Retail</span>
+          </label>
+        </div>
+      </div>
+      <!-- Question 5 -->
+      <div class="p-6 bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition duration-300 animate-fadeIn" style="animation-delay: 0.4s">
+        <p class="text-xl font-semibold text-white">Question 5: What is the company’s customer support model?</p>
+        <div class="mt-4 space-y-3">
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q5" value="a" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>A) 24/7</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q5" value="b" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>B) Business hours</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q5" value="c" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>C) Self-service</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q5" value="d" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>D) Outsourced</span>
+          </label>
+        </div>
+      </div>
+      <!-- Question 6 -->
+      <div class="p-6 bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition duration-300 animate-fadeIn" style="animation-delay: 0.5s">
+        <p class="text-xl font-semibold text-white">Question 6: What is the company’s innovation focus?</p>
+        <div class="mt-4 space-y-3">
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q6" value="a" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>A) Product</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q6" value="b" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>B) Process</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q6" value="c" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>C) Business model</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q6" value="d" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>D) Customer experience</span>
+          </label>
+        </div>
+      </div>
+      <!-- Question 7 -->
+      <div class="p-6 bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition duration-300 animate-fadeIn" style="animation-delay: 0.6s">
+        <p class="text-xl font-semibold text-white">Question 7: What is the company’s training focus?</p>
+        <div class="mt-4 space-y-3">
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q7" value="a" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>A) Skills</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q7" value="b" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>B) Leadership</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q7" value="c" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>C) Compliance</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q7" value="d" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>D) Culture</span>
+          </label>
+        </div>
+      </div>
+      <!-- Question 8 -->
+      <div class="p-6 bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition duration-300 animate-fadeIn" style="animation-delay: 0.7s">
+        <p class="text-xl font-semibold text-white">Question 8: What is the company’s marketing focus?</p>
+        <div class="mt-4 space-y-3">
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q8" value="a" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>A) Digital</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q8" value="b" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>B) Traditional</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q8" value="c" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>C) Influencers</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q8" value="d" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>D) Events</span>
+          </label>
+        </div>
+      </div>
+      <!-- Question 9 -->
+      <div class="p-6 bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition duration-300 animate-fadeIn" style="animation-delay: 0.8s">
+        <p class="text-xl font-semibold text-white">Question 9: What is the company’s HR policy?</p>
+        <div class="mt-4 space-y-3">
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q9" value="a" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>A) Flexible work</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q9" value="b" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>B) Office-only</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q9" value="c" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>C) Hybrid</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q9" value="d" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>D) Remote-first</span>
+          </label>
+        </div>
+      </div>
+      <!-- Question 10 -->
+      <div class="p-6 bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition duration-300 animate-fadeIn" style="animation-delay: 0.9s">
+        <p class="text-xl font-semibold text-white">Question 10: What is the company’s future goal?</p>
+        <div class="mt-4 space-y-3">
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q10" value="a" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>A) IPO</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q10" value="b" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>B) Acquisition</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q10" value="c" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>C) Expansion</span>
+          </label>
+          <label class="flex items-center cursor-pointer">
+            <input type="radio" name="q10" value="d" class="hidden peer">
+            <span class="w-5 h-5 mr-3 border-2 border-gray-500 rounded-full flex items-center justify-center peer-checked:bg-blue-500 peer-checked:border-blue-500">
+              <span class="w-2 h-2 bg-white rounded-full hidden peer-checked:block"></span>
+            </span>
+            <span>D) Stability</span>
+          </label>
+        </div>
+      </div>
+      <button type="button" onclick="submitQuiz()" class="w-full py-4 bg-gradient-to-r from-blue-600 to-blue-400 text-white font-bold rounded-xl hover:from-blue-700 hover:to-blue-500 transition duration-300 transform hover:scale-105 animate-pulse">Submit Quiz</button>
+    </form>
+  </main>
+  <!-- Modal -->
+  <div id="quiz-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden">
+    <div class="bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4 max-h-[80vh] overflow-y-auto border border-blue-500 shadow-2xl transform transition-all duration-500 translate-y-10 opacity-0">
+      <h2 class="text-2xl font-bold text-white mb-4">Quiz Submitted!</h2>
+      <p class="text-lg text-gray-300 mb-6">Score: 7/10</p>
+      <h3 class="text-xl font-semibold text-white mb-3">Leaderboard</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-gray-700">
+              <th class="p-3 text-gray-200">Rank</th>
+              <th class="p-3 text-gray-200">Name</th>
+              <th class="p-3 text-gray-200">Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="bg-gray-800">
+              <td class="p-3 border-b border-gray-600">1</td>
+              <td class="p-3 border-b border-gray-600">Alex Carter</td>
+              <td class="p-3 border-b border-gray-600">8/10</td>
+            </tr>
+            <tr class="bg-blue-900">
+              <td class="p-3 border-b border-gray-600">2</td>
+              <td class="p-3 border-b border-gray-600 font-bold text-blue-400">Your Rank</td>
+              <td class="p-3 border-b border-gray-600">7/10</td>
+            </tr>
+            <tr class="bg-gray-800">
+              <td class="p-3 border-b border-gray-600">3</td>
+              <td class="p-3 border-b border-gray-600">Sofia Patel</td>
+              <td class="p-3 border-b border-gray-600">7/10</td>
+            </tr>
+            <tr class="bg-gray-800">
+              <td class="p-3 border-b border-gray-600">4</td>
+              <td class="p-3 border-b border-gray-600">James Lee</td>
+              <td class="p-3 border-b border-gray-600">6/10</td>
+            </tr>
+            <tr class="bg-gray-800">
+              <td class="p-3 border-b border-gray-600">5</td>
+              <td class="p-3 border-b border-gray-600">Emma Brown</td>
+              <td class="p-3 border-b border-gray-600">6/10</td>
+            </tr>
+            <tr class="bg-gray-800">
+              <td class="p-3 border-b border-gray-600">6</td>
+              <td class="p-3 border-b border-gray-600">Liam Wong</td>
+              <td class="p-3 border-b border-gray-600">5/10</td>
+            </tr>
+            <tr class="bg-gray-800">
+              <td class="p-3 border-b border-gray-600">7</td>
+              <td class="p-3 border-b border-gray-600">Olivia Kim</td>
+              <td class="p-3 border-b border-gray-600">5/10</td>
+            </tr>
+            <tr class="bg-gray-800">
+              <td class="p-3 border-b border-gray-600">8</td>
+              <td class="p-3 border-b border-gray-600">Noah Davis</td>
+              <td class="p-3 border-b border-gray-600">4/10</td>
+            </tr>
+            <tr class="bg-gray-800">
+              <td class="p-3 border-b border-gray-600">9</td>
+              <td class="p-3 border-b border-gray-600">Ava Martinez</td>
+              <td class="p-3 border-b border-gray-600">4/10</td>
+            </tr>
+            <tr class="bg-gray-800">
+              <td class="p-3 border-b border-gray-600">10</td>
+              <td class="p-3 border-b border-gray-600">Ethan Clark</td>
+              <td class="p-3 border-b border-gray-600">3/10</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button onclick="closeModal()" class="mt-6 w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105">Close</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
